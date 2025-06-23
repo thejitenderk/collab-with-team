@@ -11,7 +11,7 @@ module "vnet_m" {
   vnet          = "dev_virtual_network_01"
   rgloc         = "Central India"
   rgname        = "dev_resource_group_01"
-  address_space = ["10.0.0.0./16"]
+  address_space = ["10.0.0.0/16"]
 
 }
 
@@ -37,16 +37,16 @@ module "subnet_m2" {
 
 
 module "pip_m1" {
-  depends_on = [module.resource_group_m]
-  source     = "../module/publicip"
+  depends_on = [module.resource_group_m, module.vnet_m]
+  source     = "../module/public-ip"
   publicip   = "frontend_public_ip"
   rgloc      = "Central India"
   rgname     = "dev_resource_group_01"
 }
 
 module "pip_m2" {
-  depends_on = [module.resource_group_m]
-  source     = "../module/publicip"
+  depends_on = [module.resource_group_m, module.vnet_m]
+  source     = "../module/public-ip"
   publicip   = "backend_public_ip"
   rgloc      = "Central India"
   rgname     = "dev_resource_group_01"

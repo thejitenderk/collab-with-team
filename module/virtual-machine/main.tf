@@ -20,7 +20,7 @@ resource "azurerm_linux_virtual_machine" "lvm" {
   admin_password =  var.admin_password
   disable_password_authentication = false
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.nic.id,
   ]
 
 

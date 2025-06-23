@@ -35,4 +35,7 @@ resource "azurerm_linux_virtual_machine" "lvm" {
     sku       = "20_04-lts"
     version   = "latest"
   }
+
+custom_data = var.custom_data
+
 }

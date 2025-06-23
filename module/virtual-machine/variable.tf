@@ -7,3 +7,4 @@ variable "lvmm" {}
 variable "publicip" {}
 variable "subnetname" {}
 variable "vnet" {}
+variable "custom_data" {}

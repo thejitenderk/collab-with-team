@@ -21,7 +21,7 @@ module "subnet_m1" {
   subnetname     = "subnet_name_01"
   rgname         = "dev_resource_group_01"
   vnet           = "dev_virtual_network_01"
-  address_prefix = ["10.0.1.0/24"]
+  address_prefixes = ["10.0.1.0/24"]
 
 }
 
@@ -31,7 +31,7 @@ module "subnet_m2" {
   subnetname     = "subnet_name_02"
   rgname         = "dev_resource_group_01"
   vnet           = "dev_virtual_network_01"
-  address_prefix = ["10.0.2.0/24"]
+  address_prefixes = ["10.0.2.0/24"]
 
 }
 

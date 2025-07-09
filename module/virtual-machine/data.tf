@@ -1,10 +1,12 @@
 data "azurerm_public_ip" "datapublic" {
-  name                = var.publicip
-  resource_group_name = var.rgname
+  for_each = var.lvmm
+  name                = each.value.publicname
+  resource_group_name = each.value.rgname
 }
 
 data "azurerm_subnet" "datasubnet" {
-  name                 = var.subnetname
-  virtual_network_name = var.vnet
-  resource_group_name  = var.rgname
+  for_each = var.lvmm
+  name                 = each.value.subnetname
+  virtual_network_name = each.value.vnetname
+  resource_group_name  = each.value.rgname
 }

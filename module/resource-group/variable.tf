@@ -1,2 +1,1 @@
 variable "rgname" {}
-variable "rgloc" {}

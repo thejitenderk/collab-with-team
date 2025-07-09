@@ -1,26 +1,28 @@
 resource "azurerm_network_interface" "nic" {
-  name                = var.nicname
-  location            = var.rgloc
-  resource_group_name = var.rgname
+  for_each            = var.lvmm
+  name                = each.value.nicname
+  location            = each.value.rgloc
+  resource_group_name = each.value.rgname
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = data.azurerm_subnet.datasubnet.id
+    subnet_id                     = data.azurerm_subnet.datasubnet[each.key].id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = data.azurerm_public_ip.datapublic.id
+    public_ip_address_id          = data.azurerm_public_ip.datapublic[each.key].id
   }
 }
 
 resource "azurerm_linux_virtual_machine" "lvm" {
-  name                = var.lvmm
-  resource_group_name = var.rgname
-  location            = var.rgloc
-  size                = "Standard_B1s"
-  admin_username      = var.admin_username
-  admin_password =  var.admin_password
+  for_each                        = var.lvmm
+  name                            = each.value.name
+  resource_group_name             = each.value.rgname
+  location                        = each.value.rgloc
+  size                            = "Standard_B1s"
+  admin_username                  = each.value.username
+  admin_password                  = each.value.password
   disable_password_authentication = false
   network_interface_ids = [
-    azurerm_network_interface.nic.id,
+    azurerm_network_interface.nic[each.key].id,
   ]
 
 
@@ -36,6 +38,6 @@ resource "azurerm_linux_virtual_machine" "lvm" {
     version   = "latest"
   }
 
-custom_data = var.custom_data
+  custom_data = each.value.customdata
 
 }

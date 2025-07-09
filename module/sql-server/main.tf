@@ -1,11 +1,12 @@
 
 resource "azurerm_mssql_server" "sql_server" {
-  name                         = var.servername
-  resource_group_name          = var.rgname
-  location                     = var.rgloc
+  for_each                     = var.servername
+  name                         = each.value.name
+  resource_group_name          = each.value.rgname
+  location                     = each.value.rgloc
   version                      = "12.0"
-  administrator_login          = var.username
-  administrator_login_password = var.password
+  administrator_login          = each.value.admin_login
+  administrator_login_password = each.value.admin_password
 
-  
+
 }

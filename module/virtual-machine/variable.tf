@@ -1,10 +1,2 @@
-variable "nicname" {}
-variable "rgloc" {}
-variable "rgname" {}
-variable "admin_username" {}
-variable "admin_password" {}
 variable "lvmm" {}
-variable "publicip" {}
-variable "subnetname" {}
-variable "vnet" {}
-variable "custom_data" {}
+

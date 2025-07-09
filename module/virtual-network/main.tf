@@ -1,7 +1,8 @@
 resource "azurerm_virtual_network" "vnet" {
-    name = var.vnet
-    location = var.rgloc
-    resource_group_name = var.rgname
-    address_space = var.address_space
-  
+  for_each            = var.vnet
+  name                = each.value.name
+  location            = each.value.rgloc
+  resource_group_name = each.value.rgname
+  address_space       = each.value.address_space
+
 }

@@ -15,3 +15,5 @@ variable "sqldbs" {}
 variable "nsg" {
   
 }
+
+variable "subnet_association"{}

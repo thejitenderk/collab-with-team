@@ -116,3 +116,11 @@ nsg = {
     
   }
 }
+
+subnet_association = {
+  subnetassociation1 = {
+    subnet_association = "dev-todo-jk-association"
+   
+
+  }
+}

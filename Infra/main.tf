@@ -53,3 +53,14 @@ module "nsg" {
   
   
 }
+
+module "subnet_association" {
+  depends_on = [ module.subnets , module.nsg , module.rgs, module.vnets ]
+  source = "../module/subnet-network-association"
+  subnet_association = var.subnet_association
+  vnet = var.vnet_name
+  rgname = var.rg_name
+  subnetname = var.subnet_name
+  nsg = var.nsg
+  
+}

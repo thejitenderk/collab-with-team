@@ -107,3 +107,12 @@ sqldbs = {
     servername = "devtodojksqlserver"
   }
 }
+
+nsg = {
+  nsg1 = {
+    rgname = "dev-todo-jk-rg"
+    location = "UK South"
+    nsg =  "devtodojknsg"
+    
+  }
+}

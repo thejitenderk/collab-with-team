@@ -11,3 +11,7 @@ variable "lvmms" {}
 variable "server_name" {}
 
 variable "sqldbs" {}
+
+variable "nsg" {
+  
+}

@@ -45,3 +45,11 @@ module "sqldbs" {
   sql_database = var.sqldbs
 
 }
+
+module "nsg" {
+  depends_on = [ module.rgs,module.nsg ]
+  source = "../module/nsg"
+  nsg = var.nsg
+  
+  
+}

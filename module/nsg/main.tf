@@ -1,18 +1,25 @@
 resource "azurerm_network_security_group" "nsg" {
-    for_each = var.nsg
+  for_each            = var.nsg
   name                = each.value.nsg
   location            = each.value.location
   resource_group_name = each.value.rgname
 
-  security_rule {
-    name                       = "test123"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  dynamic "security_rule" {
+    for_each = var.nsg
+    content {
+      name                       = security_rule.value.name
+      priority                   = security_rule.value.priority
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = security_rule.value.dest_range
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+
   }
 }
+
+
+

@@ -46,16 +46,16 @@ pip = {
 
 lvmms = {
   vm1 = {
-    name       = "devtodojkvm1"
-    rgloc      = "UK South"
-    rgname     = "dev-todo-jk-rg"
-    subnetname = "dev-todo-jk-subnet"
-    vnetname   = "dev-todo-jk-vnet"
-    publicname = "dev-todo-jk-pip"
-    nicname    = "dev-todo-jk-nic1"
-    username   = "adminuser"
-    password   = "Welcome@123"
-    customdata = <<-EOT
+    name          = "devtodojkvm1"
+    rgloc         = "UK South"
+    rgname        = "dev-todo-jk-rg"
+    subnetname    = "dev-todo-jk-subnet"
+    vnetname      = "dev-todo-jk-vnet"
+    use_public_ip = true
+    nicname       = "dev-todo-jk-nic1"
+    username      = "adminuser"
+    password      = "Welcome@123"
+    customdata    = <<-EOT
       #cloud-config
       package_update: true
       package_upgrade: true
@@ -67,16 +67,16 @@ lvmms = {
       EOT
   }
   vm2 = {
-    name       = "devtodojkvm2"
-    rgloc      = "UK South"
-    rgname     = "dev-todo-jk-rg"
-    subnetname = "dev-todo-jk-subnet"
-    publicname = "dev-todo-jk-pip2"
-    vnetname   = "dev-todo-jk-vnet"
-    nicname    = "dev-todo-jk-nic2"
-    username   = "adminuser"
-    password   = "Welcome@123"
-    customdata = <<-EOT
+    name          = "devtodojkvm2"
+    rgloc         = "UK South"
+    rgname        = "dev-todo-jk-rg"
+    subnetname    = "dev-todo-jk-subnet"
+    use_public_ip = false
+    vnetname      = "dev-todo-jk-vnet"
+    nicname       = "dev-todo-jk-nic2"
+    username      = "adminuser"
+    password      = "Welcome@123"
+    customdata    = <<-EOT
       #cloud-config
       package_update: true
       package_upgrade: true
@@ -110,17 +110,32 @@ sqldbs = {
 
 nsg = {
   nsg1 = {
-    rgname = "dev-todo-jk-rg"
+    rgname   = "dev-todo-jk-rg"
     location = "UK South"
-    nsg =  "devtodojknsg"
-    
+    nsg      = "devtodojknsg"
+    security_rule = [{
+      name       = "sshrule"
+      priority   = "101"
+      dest_range = "22"
+
+      },
+      {
+        name       = "sshrule"
+        priority   = "102"
+        dest_range = "80"
+    }]
   }
+
 }
+
+
+
+
 
 subnet_association = {
   subnetassociation1 = {
     subnet_association = "dev-todo-jk-association"
-   
+
 
   }
 }

@@ -3,7 +3,7 @@ resource "azurerm_public_ip" "pip" {
   name                = each.value.name
   location            = each.value.rgloc
   resource_group_name = each.value.rgname
-  allocation_method   = "Dynamic"
-  sku                 = "Basic"
+  allocation_method   = "Static"
+  sku                 = "Standard"
 
 }

@@ -42,6 +42,7 @@ pip = {
     rgloc  = "UK South"
     rgname = "dev-todo-jk-rg"
   }
+
 }
 
 lvmms = {
@@ -52,6 +53,7 @@ lvmms = {
     subnetname    = "dev-todo-jk-subnet"
     vnetname      = "dev-todo-jk-vnet"
     use_public_ip = true
+    pipname       = "dev-todo-jk-pip"
     nicname       = "dev-todo-jk-nic1"
     username      = "adminuser"
     password      = "Welcome@123"
@@ -72,7 +74,8 @@ lvmms = {
     rgloc         = "UK South"
     rgname        = "dev-todo-jk-rg"
     subnetname    = "dev-todo-jk-subnet"
-    use_public_ip = false
+    use_public_ip = true
+    pipname       = "dev-todo-jk-pip2"
     vnetname      = "dev-todo-jk-vnet"
     nicname       = "dev-todo-jk-nic2"
     username      = "adminuser"

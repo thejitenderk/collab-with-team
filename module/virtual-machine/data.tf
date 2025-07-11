@@ -1,6 +1,8 @@
 data "azurerm_public_ip" "datapublic" {
-  for_each            = var.lvmm
-  name                = each.value.use_public_ip
+  for_each = {
+  for k, v in var.lvmm : k => v if v.use_public_ip
+}
+  name                = each.value.pipname
   resource_group_name = each.value.rgname
 }
 

@@ -38,6 +38,6 @@ resource "azurerm_linux_virtual_machine" "lvm" {
     version   = "latest"
   }
 
-  custom_data = each.value.customdata
+  custom_data = base64encode(each.value.customdata)
 
 }

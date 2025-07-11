@@ -65,6 +65,7 @@ lvmms = {
         - systemctl start nginx
         - systemctl enable nginx
       EOT
+
   }
   vm2 = {
     name          = "devtodojkvm2"
@@ -86,6 +87,7 @@ lvmms = {
         - systemctl start nginx
         - systemctl enable nginx
       EOT
+
   }
 }
 
@@ -94,8 +96,8 @@ server_name = {
     name     = "devtodojksqlserver"
     rgloc    = "UK South"
     rgname   = "dev-todo-jk-rg"
-    username = "adminuser"
-    password = "Welcome@123"
+    admin_login = "adminuser"
+    admin_password = "Welcome@123"
   }
 }
 
@@ -104,7 +106,7 @@ sqldbs = {
     name       = "devtodojksqldb"
     rgloc      = "UK South"
     rgname     = "dev-todo-jk-rg"
-    servername = "devtodojksqlserver"
+    server_name = "devtodojksqlserver"
   }
 }
 
@@ -113,29 +115,29 @@ nsg = {
     rgname   = "dev-todo-jk-rg"
     location = "UK South"
     nsg      = "devtodojknsg"
-    security_rule = [{
-      name       = "sshrule"
-      priority   = "101"
-      dest_range = "22"
-
-      },
+    security_rule = [
       {
         name       = "sshrule"
-        priority   = "102"
+        priority   = 101
+        dest_range = "22"
+      },
+      {
+        name       = "httprule"
+        priority   = 102
         dest_range = "80"
-    }]
+      }
+    ]
   }
-
 }
 
 
 
 
 
-subnet_association = {
-  subnetassociation1 = {
-    subnet_association = "dev-todo-jk-association"
-
-
+nicnsgass = {
+  nicnsgass1 = {
+    nicname = "dev-todo-jk-nic1"
+    rgname  = "dev-todo-jk-rg"
+    nsg     = "devtodojknsg"
   }
 }

@@ -16,4 +16,4 @@ variable "nsg" {
   
 }
 
-variable "subnet_association"{}
+variable "nicnsgass"{}

@@ -5,9 +5,9 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = each.value.rgname
 
   dynamic "security_rule" {
-    for_each = each.value.security_rule  # ✅ This is the correct source
+    for_each = each.value.security_rule # ✅ This is the correct source
     content {
-      name                       = security_rule.value.name       # ✅ Always use .value
+      name                       = security_rule.value.name # ✅ Always use .value
       priority                   = security_rule.value.priority
       direction                  = "Inbound"
       access                     = "Allow"

@@ -5,12 +5,9 @@ jobs:
   test:
     runs-on: Self-Hosted
     steps:
-    - name: Azure Login action
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.creds }}
-        enable-AzPSSession: true
-    
+    - shell: pwsh
+      env:
+        SUPER_SECRET: ${{ secrets.creds }}
   
     - uses: hashicorp/setup-terraform@v3
     

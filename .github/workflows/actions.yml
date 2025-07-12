@@ -1,7 +1,7 @@
 ---
 name: Run Azure Login with the Service Principal secret
-on:
-  - push
+on: [push]
+
 jobs:
   test:
     runs-on: Self-Hosted
@@ -12,4 +12,4 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - uses: hashicorp/setup-terraform@v3
-    - run: terraform init --chdir=infra
+    - run: terraform init

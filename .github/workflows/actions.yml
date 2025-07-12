@@ -8,5 +8,5 @@ jobs:
     - name: Azure Login action
       uses: azure/login@v2
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.creds }}
         enable-AzPSSession: true

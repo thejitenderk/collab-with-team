@@ -10,3 +10,8 @@ jobs:
       with:
         creds: ${{ secrets.creds }}
         enable-AzPSSession: true
+    
+  
+    - uses: hashicorp/setup-terraform@v3
+    
+    - run: terraform init --chdir=infra

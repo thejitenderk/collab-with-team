@@ -6,8 +6,10 @@ jobs:
   test:
     runs-on: Self-Hosted
     steps:
-      - shell: pwsh
-        env:
-          SUPER_SECRET: ${{ secrets.creds }}
-      - uses: hashicorp/setup-terraform@v3
-      - run: terraform init --chdir=infra
+    - name: Azure Login action
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - uses: hashicorp/setup-terraform@v3
+    - run: terraform init --chdir=infra

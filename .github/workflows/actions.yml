@@ -1,14 +1,13 @@
+---
 name: Run Azure Login with the Service Principal secret
-on: [push]
-
+on:
+  - push
 jobs:
   test:
     runs-on: Self-Hosted
     steps:
-    - shell: pwsh
-      env:
-        SUPER_SECRET: ${{ secrets.creds }}
-  
-    - uses: hashicorp/setup-terraform@v3
-    
-    - run: terraform init --chdir=infra
+      - shell: pwsh
+        env:
+          SUPER_SECRET: ${{ secrets.creds }}
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init --chdir=infra

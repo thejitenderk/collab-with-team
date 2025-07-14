@@ -1,6 +1,18 @@
-variable "rg_name" {}
+variable "rg_name" {
+  type = map(object({
+    rgname = string
+    rgloc  = string
+  }))
+}
 
-variable "vnet_name" {}
+variable "vnet_name" {
+    type = map(object({
+        name          = string
+        rgloc         = string
+        rgname        = string
+        address_space = list(string)
+    }))
+}
 
 variable "subnet_name" {}
 
@@ -13,7 +25,7 @@ variable "server_name" {}
 variable "sqldbs" {}
 
 variable "nsg" {
-  
+
 }
 
-variable "nicnsgass"{}
+variable "nicnsgass" {}

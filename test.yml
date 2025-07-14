@@ -1,0 +1,12 @@
+vegetable:
+  - name: carrot
+    color: orange
+    family: apiaceae
+  - name: broccoli
+    color: green
+    family: brassicaceae
+  - name: beetroot
+    color: red
+    family: amaranthaceae
+
+

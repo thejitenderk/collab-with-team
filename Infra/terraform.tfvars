@@ -96,19 +96,19 @@ lvmms = {
 
 server_name = {
   server1 = {
-    name     = "devtodojksqlserver"
-    rgloc    = "UK South"
-    rgname   = "dev-todo-jk-rg"
-    admin_login = "adminuser"
+    name           = "devtodojksqlserver"
+    rgloc          = "UK South"
+    rgname         = "dev-todo-jk-rg"
+    admin_login    = "adminuser"
     admin_password = "Welcome@123"
   }
 }
 
 sqldbs = {
   db1 = {
-    name       = "devtodojksqldb"
-    rgloc      = "UK South"
-    rgname     = "dev-todo-jk-rg"
+    name        = "devtodojksqldb"
+    rgloc       = "UK South"
+    rgname      = "dev-todo-jk-rg"
     server_name = "devtodojksqlserver"
   }
 }
@@ -119,11 +119,6 @@ nsg = {
     location = "UK South"
     nsg      = "devtodojknsg"
     security_rule = [
-      {
-        name       = "sshrule"
-        priority   = 101
-        dest_range = "22"
-      },
       {
         name       = "httprule"
         priority   = 102

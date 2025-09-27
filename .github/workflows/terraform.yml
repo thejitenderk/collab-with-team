@@ -24,16 +24,15 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
-    - name: Trigger App Repo via GH CLI
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh api \
-          -X POST \
-          -H "Accept: application/vnd.github+json" \
-          /repos/thejitenderk/react-weather-app/dispatches \
-          -f event_type=terraform-complete \
-          -f client_payload='{"status":"success"}'
+    - name: Repository Dispatch
+      uses: peter-evans/repository-dispatch@v3.0.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}                  # Personal Access Token with repo + workflow scopes
+        repository: thejitenderk/react-weather-app      # Target repository to trigger
+        event-type: terraform-complete                  # Custom event name
+        client-payload: '{"status": "success"}'         # Optional payload, can include info like environment
+
+          
 
 
     # # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token

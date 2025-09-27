@@ -29,7 +29,7 @@ module "vms" {
   lvmm       = var.lvmms
 }
 
-
+/*
 module "sql_servers" {
   depends_on = [module.rgs]
   source     = "../module/sql-server"
@@ -41,6 +41,7 @@ module "sqldbs" {
   source       = "../module/sql-database"
   sql_database = var.sqldbs
 }
+*/
 
 module "nsg" {
   depends_on = [module.rgs]

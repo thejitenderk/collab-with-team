@@ -12,9 +12,9 @@ variable "pip" {}
 
 variable "lvmms" {}
 
-variable "server_name" {}
+#variable "server_name" {}
 
-variable "sqldbs" {}
+#variable "sqldbs" {}
 
 variable "nsg" {
 

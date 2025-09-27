@@ -25,7 +25,8 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
     - name: Trigger App Repo via GH CLI
-
+      env:
+        GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
         gh api \
           -X POST \

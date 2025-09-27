@@ -27,7 +27,7 @@ jobs:
     - name: Trigger App Repo
       uses: peter-evans/repository-dispatch@v3.0.0
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT_TOKEN }}
         repository: thejitenderk/react-weather-app
         event-type: terraform-complete
         client-payload: '{"status": "success"}'

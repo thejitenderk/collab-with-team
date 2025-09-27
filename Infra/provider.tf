@@ -6,12 +6,15 @@ terraform {
     }
   }
   backend "azurerm" {
-    
+    resource_group_name   = "real-project-rg"                  # Resource group ka naam jahan storage account hai
+    storage_account_name  = "realstorageaccounttf"     # Storage account ka naam
+    container_name        = "realcontainer"            # Blob container ka naam
+    key                   = "dev.terraform.tfstate"        # State file ka naam
   }
 }
 
 provider "azurerm" {
   features {}
-  subscription_id = "84382787-1367-4937-befb-9757f44087ef"
+  subscription_id = "6427aa49-28ab-4afb-8e17-6f227b30229c"
 
 }

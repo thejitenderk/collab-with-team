@@ -94,9 +94,10 @@ lvmms = {
   }
 }
 
-server_name = {
-  server1 = {
-    name           = "devtodojksqlserver"
+/*
+#server_name = {
+#  server1 = {
+#    name           = "devtodojksqlserver"
     rgloc          = "UK South"
     rgname         = "dev-todo-jk-rg"
     admin_login    = "adminuser"
@@ -112,6 +113,7 @@ sqldbs = {
     server_name = "devtodojksqlserver"
   }
 }
+*/
 
 nsg = {
   nsg1 = {

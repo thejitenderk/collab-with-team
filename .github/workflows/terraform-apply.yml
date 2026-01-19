@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
 
       # Authenticate with Azure using the service principal credentials
       - name: Azure Authentication
@@ -63,7 +63,7 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
 
       # Authenticate with Azure using the service principal credentials
       - name: Azure Authentication
@@ -98,13 +98,14 @@ jobs:
 
       # Perform cost estimation based on the Terraform plan
       - name: Run FinOps Cost Estimation
-        uses: finops/terraform-cost-estimation-action@v1
+        uses: infracost/actions@v3.0.0
         with:
-          terraform-directory: ./environment/dev
+          api-key: ico-gtkv3hjTodX5SSd1iXocWqlbPY1VSvJC
+          path: ./environment/dev/terraform.tfvars
 
       # Upload Terraform plan as an artifact for the apply job
       - name: Upload Terraform Plan Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: terraform-plan
           path: ./plan_${BUILD_ID}.tfplan
@@ -117,7 +118,7 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
 
       # Authenticate with Azure using the service principal credentials
       - name: Azure Authentication
@@ -141,7 +142,7 @@ jobs:
 
       # Download the previously uploaded Terraform plan
       - name: Download Terraform Plan Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v7.0.0
         with:
           name: terraform-plan
           path: ./ # Path to download the artifact

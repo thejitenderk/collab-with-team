@@ -97,11 +97,27 @@ jobs:
         run: terraform -chdir=environment/dev show -no-color ./plan_${BUILD_ID}.tfplan
 
       # Perform cost estimation based on the Terraform plan
-      - name: Run FinOps Cost Estimation
-        uses: infracost/actions@v3.0.0
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        # See https://github.com/infracost/actions/tree/master/setup for other inputs
+        # If you can't use this action, use Docker image infracost/infracost:ci-0.10
         with:
           api-key: ico-gtkv3hjTodX5SSd1iXocWqlbPY1VSvJC
-          path: ./environment/dev/terraform.tfvars
+
+      # Generate Infracost JSON file as the baseline.
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown --path=environment/dev/terraform.tfvars \
+                              --format=json \
+                              --out-file=/tmp/infracost-base.json
+                              
+      # Upload the Infracost JSON file as an artifact
+      - name: Upload Infracost cost estimate file
+        uses: actions/upload-artifact@v3
+        with:
+          name: infracost-estimate
+          path: ./infracost-base.json
 
       # Upload Terraform plan as an artifact for the apply job
       - name: Upload Terraform Plan Artifact

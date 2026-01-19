@@ -7,10 +7,10 @@ on:
   #   branches:
   #     - main
   #     - features/*
-  # push:
-  #   branches:
-  #     - main
-  #     - features/*
+  push:
+    branches:
+      - main
+      - features/*
 
 permissions:
   contents: read
@@ -91,10 +91,6 @@ jobs:
           BUILD_ID=$(date +%Y%m%d%H%M%S)  # Generate a unique build ID based on the timestamp
           terraform -chdir=environment/dev plan -out=./plan_${BUILD_ID}.tfplan
         continue-on-error: false  # Fail immediately if plan execution fails
-
-      # Log Terraform plan output for review and troubleshooting
-      - name: Log Terraform Plan Output
-        run: terraform -chdir=environment/dev show -no-color ./plan_${BUILD_ID}.tfplan
 
       # Perform cost estimation based on the Terraform plan
 

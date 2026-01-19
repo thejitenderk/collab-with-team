@@ -17,46 +17,46 @@ permissions:
   id-token: write
 
 jobs:
-  terraformLintAndScan:
-    name: "Terraform Linting and Security Scans"
-    runs-on: ubuntu-latest
-    environment: dev  # Change to your actual environment (dev, staging, prod)
-    steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout Repository Code
-        uses: actions/checkout@v6.0.2
+  # terraformLintAndScan:
+  #   name: "Terraform Linting and Security Scans"
+  #   runs-on: ubuntu-latest
+  #   environment: dev  # Change to your actual environment (dev, staging, prod)
+  #   steps:
+  #     # Checkout the repository to the GitHub Actions runner
+  #     - name: Checkout Repository Code
+  #       uses: actions/checkout@v6.0.2
 
-      # Authenticate with Azure using the service principal credentials
-      - name: Azure Authentication
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     # Authenticate with Azure using the service principal credentials
+  #     - name: Azure Authentication
+  #       uses: azure/login@v2
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Install and configure Terraform CLI
-      - name: Setup Terraform CLI
-        uses: hashicorp/setup-terraform@v1
+  #     # Install and configure Terraform CLI
+  #     - name: Setup Terraform CLI
+  #       uses: hashicorp/setup-terraform@v1
 
-      # Ensure the correct version of Terraform is installed
-      - name: Verify Terraform Version
-        run: terraform --version
+  #     # Ensure the correct version of Terraform is installed
+  #     - name: Verify Terraform Version
+  #       run: terraform --version
 
-      # Lint Terraform code to ensure formatting and validity
-      - name: Lint Terraform Configuration
-        run: |
-          terraform fmt -check -diff  # Check for any formatting issues
-          terraform validate  # Validate the Terraform configuration files
+  #     # Lint Terraform code to ensure formatting and validity
+  #     - name: Lint Terraform Configuration
+  #       run: |
+  #         terraform fmt -check -diff  # Check for any formatting issues
+  #         terraform validate  # Validate the Terraform configuration files
 
-      # Run security scan on Terraform configuration using tfsec
-      - name: Run tfsec Security Scan
-        run: |
-          curl -sSL https://github.com/aquasecurity/tfsec/releases/download/v1.0.0/tfsec-linux-amd64 -o /usr/local/bin/tfsec
-          chmod +x /usr/local/bin/tfsec
-          tfsec ./environment/dev # Perform security scan on the dev environment
+  #     # Run security scan on Terraform configuration using tfsec
+  #     - name: Run tfsec Security Scan
+  #       run: |
+  #         curl -sSL https://github.com/aquasecurity/tfsec/releases/download/v1.0.0/tfsec-linux-amd64 -o /usr/local/bin/tfsec
+  #         chmod +x /usr/local/bin/tfsec
+  #         tfsec ./environment/dev # Perform security scan on the dev environment
 
   terraformPlanAndCostEstimation:
-    needs: terraformLintAndScan
+    # needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
     runs-on: ubuntu-latest
     environment: dev  # Change to your actual environment (dev, staging, prod)

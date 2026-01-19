@@ -1,0 +1,158 @@
+name: Terraform Infrastructure Deployment
+
+on:
+  workflow_dispatch:
+
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - features/*
+  # push:
+  #   branches:
+  #     - main
+  #     - features/*
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraformLintAndScan:
+    name: "Terraform Linting and Security Scans"
+    runs-on: ubuntu-latest
+    environment: dev  # Change to your actual environment (dev, staging, prod)
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      # Authenticate with Azure using the service principal credentials
+      - name: Azure Authentication
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Install and configure Terraform CLI
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v1
+
+      # Ensure the correct version of Terraform is installed
+      - name: Verify Terraform Version
+        run: terraform --version
+
+      # Lint Terraform code to ensure formatting and validity
+      - name: Lint Terraform Configuration
+        run: |
+          terraform fmt -check -diff  # Check for any formatting issues
+          terraform validate  # Validate the Terraform configuration files
+
+      # Run security scan on Terraform configuration using tfsec
+      - name: Run tfsec Security Scan
+        run: |
+          curl -sSL https://github.com/aquasecurity/tfsec/releases/download/v1.0.0/tfsec-linux-amd64 -o /usr/local/bin/tfsec
+          chmod +x /usr/local/bin/tfsec
+          tfsec ./environment/dev # Perform security scan on the dev environment
+
+  terraformPlanAndCostEstimation:
+    name: "Terraform Plan and Cost Estimation"
+    runs-on: ubuntu-latest
+    environment: dev  # Change to your actual environment (dev, staging, prod)
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      # Authenticate with Azure using the service principal credentials
+      - name: Azure Authentication
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Install and configure Terraform CLI
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v1
+
+      # Ensure the correct version of Terraform is installed
+      - name: Verify Terraform Version
+        run: terraform --version
+
+      # Initialize Terraform configuration for the dev environment
+      - name: Terraform Initialization
+        run: terraform -chdir=environment/dev init
+
+      # Plan the Terraform infrastructure changes
+      - name: Terraform Plan Execution
+        run: |
+          BUILD_ID=$(date +%Y%m%d%H%M%S)  # Generate a unique build ID based on the timestamp
+          terraform -chdir=environment/dev plan -out=./plan_${BUILD_ID}.tfplan
+        continue-on-error: false  # Fail immediately if plan execution fails
+
+      # Log Terraform plan output for review and troubleshooting
+      - name: Log Terraform Plan Output
+        run: terraform -chdir=environment/dev show -no-color ./plan_${BUILD_ID}.tfplan
+
+      # Perform cost estimation based on the Terraform plan
+      - name: Run FinOps Cost Estimation
+        uses: finops/terraform-cost-estimation-action@v1
+        with:
+          terraform-directory: ./environment/dev
+
+      # Upload Terraform plan as an artifact for the apply job
+      - name: Upload Terraform Plan Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-plan
+          path: ./plan_${BUILD_ID}.tfplan
+
+  terraformApplyAndApproval:
+    name: "Terraform Apply with Manual Approval"
+    runs-on: ubuntu-latest
+    environment: dev  # Change to your actual environment (dev, staging, prod)
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      # Authenticate with Azure using the service principal credentials
+      - name: Azure Authentication
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Install and configure Terraform CLI
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v1
+
+      # Ensure the correct version of Terraform is installed
+      - name: Verify Terraform Version
+        run: terraform --version
+
+      # Initialize Terraform configuration for the dev environment
+      - name: Terraform Initialization
+        run: terraform -chdir=environment/dev init
+
+      # Download the previously uploaded Terraform plan
+      - name: Download Terraform Plan Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform-plan
+          path: ./ # Path to download the artifact
+
+      # Await manual approval for Terraform Apply
+      - name: Await Manual Approval for Apply
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          workflow: terraform-apply-approval.yml  # Custom approval workflow file
+          ref: refs/heads/main
+        continue-on-error: true  # Allow workflow to wait for approval if not granted yet
+
+      # Apply the Terraform plan after approval
+      - name: Terraform Apply (Post-Approval)
+        if: success()  # Only run if the manual approval step was successful
+        run: terraform -chdir=environment/dev apply -auto-approve ./plan_${{ steps.download.outputs.build_id }}.tfplan

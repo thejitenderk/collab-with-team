@@ -94,26 +94,6 @@ lvmms = {
   }
 }
 
-/*
-#server_name = {
-#  server1 = {
-#    name           = "devtodojksqlserver"
-    rgloc          = "UK South"
-    rgname         = "dev-todo-jk-rg"
-    admin_login    = "adminuser"
-    admin_password = "Welcome@123"
-  }
-}
-
-sqldbs = {
-  db1 = {
-    name        = "devtodojksqldb"
-    rgloc       = "UK South"
-    rgname      = "dev-todo-jk-rg"
-    server_name = "devtodojksqlserver"
-  }
-}
-*/
 
 nsg = {
   nsg1 = {
@@ -125,6 +105,11 @@ nsg = {
         name       = "httprule"
         priority   = 102
         dest_range = "80"
+      },
+      {
+        name       = "sshrule"
+        priority   = 100
+        dest_range = "22"
       }
     ]
   }

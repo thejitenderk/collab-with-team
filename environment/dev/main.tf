@@ -29,19 +29,6 @@ module "vms" {
   lvmm       = var.lvmms
 }
 
-/*
-module "sql_servers" {
-  depends_on = [module.rgs]
-  source     = "../module/sql-server"
-  servername = var.server_name
-}
-
-module "sqldbs" {
-  depends_on   = [module.rgs, module.sql_servers]
-  source       = "../module/sql-database"
-  sql_database = var.sqldbs
-}
-*/
 
 module "nsg" {
   depends_on = [module.rgs]

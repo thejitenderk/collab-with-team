@@ -100,13 +100,7 @@ jobs:
         # If you can't use this action, use Docker image infracost/infracost:ci-0.10
         with:
           api-key: ico-gtkv3hjTodX5SSd1iXocWqlbPY1VSvJC
-
-      # Generate Infracost JSON file as the baseline.
-      - name: Generate Infracost cost estimate baseline
-        run: |
-          infracost breakdown --path=environment/dev/terraform.tfvars \
-                              --format=json \
-                              --out-file=/tmp/infracost-base.json
+          path: ./environment/dev
 
       # Upload the Infracost JSON file as an artifact
       - name: Upload Infracost cost estimate file

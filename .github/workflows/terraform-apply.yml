@@ -56,6 +56,7 @@ jobs:
           tfsec ./environment/dev # Perform security scan on the dev environment
 
   terraformPlanAndCostEstimation:
+    needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
     runs-on: ubuntu-latest
     environment: dev  # Change to your actual environment (dev, staging, prod)
@@ -109,6 +110,7 @@ jobs:
           path: ./plan_${BUILD_ID}.tfplan
 
   terraformApplyAndApproval:
+    needs: terraformPlanAndCostEstimation
     name: "Terraform Apply with Manual Approval"
     runs-on: ubuntu-latest
     environment: dev  # Change to your actual environment (dev, staging, prod)

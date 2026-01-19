@@ -111,10 +111,10 @@ jobs:
           infracost breakdown --path=environment/dev/terraform.tfvars \
                               --format=json \
                               --out-file=/tmp/infracost-base.json
-                              
+
       # Upload the Infracost JSON file as an artifact
       - name: Upload Infracost cost estimate file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: infracost-estimate
           path: ./infracost-base.json

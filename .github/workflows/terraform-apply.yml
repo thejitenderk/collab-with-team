@@ -88,33 +88,32 @@ jobs:
       # Plan the Terraform infrastructure changes
       - name: Terraform Plan Execution
         run: |
-          BUILD_ID=$(date +%Y%m%d%H%M%S)  # Generate a unique build ID based on the timestamp
-          terraform -chdir=environment/dev plan -out=./plan_${BUILD_ID}.tfplan
+          terraform -chdir=environment/dev plan -out=./plan_$GITHUB_RUN_ID.tfplan
         continue-on-error: false  # Fail immediately if plan execution fails
 
       # Perform cost estimation based on the Terraform plan
 
-      - name: Setup Infracost
-        uses: infracost/actions/setup@v3
-        # See https://github.com/infracost/actions/tree/master/setup for other inputs
-        # If you can't use this action, use Docker image infracost/infracost:ci-0.10
-        with:
-          api-key: ico-gtkv3hjTodX5SSd1iXocWqlbPY1VSvJC
-          path: ./environment/dev
+      # - name: Setup Infracost
+      #   uses: infracost/actions/setup@v3
+      #   # See https://github.com/infracost/actions/tree/master/setup for other inputs
+      #   # If you can't use this action, use Docker image infracost/infracost:ci-0.10
+      #   with:
+      #     api-key: ico-gtkv3hjTodX5SSd1iXocWqlbPY1VSvJC
+      #     path: ./environment/dev
 
-      # Upload the Infracost JSON file as an artifact
-      - name: Upload Infracost cost estimate file
-        uses: actions/upload-artifact@v6.0.0
-        with:
-          name: infracost-estimate
-          path: ./infracost-base.json
+      # # Upload the Infracost JSON file as an artifact
+      # - name: Upload Infracost cost estimate file
+      #   uses: actions/upload-artifact@v6.0.0
+      #   with:
+      #     name: infracost-estimate
+      #     path: ./infracost-base.json
 
       # Upload Terraform plan as an artifact for the apply job
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v6.0.0
         with:
           name: terraform-plan
-          path: ./plan_${BUILD_ID}.tfplan
+          path: ./plan-$GITHUB_RUN_ID.tfplan
 
   terraformApplyAndApproval:
     needs: terraformPlanAndCostEstimation
@@ -151,7 +150,7 @@ jobs:
         uses: actions/download-artifact@v7.0.0
         with:
           name: terraform-plan
-          path: ./ # Path to download the artifact
+          path: ./
 
       # Await manual approval for Terraform Apply
       - name: Await Manual Approval for Apply

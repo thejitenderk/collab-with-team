@@ -155,11 +155,14 @@ jobs:
 
       # Await manual approval for Terraform Apply
       - name: Await Manual Approval for Apply
-        uses: peter-evans/workflow-dispatch@v1
+        uses: trstringer/manual-approval@v1.9.0
         with:
-          workflow: terraform-apply-approval.yml  # Custom approval workflow file
-          ref: refs/heads/main
-        continue-on-error: true  # Allow workflow to wait for approval if not granted yet
+          secret: ${{ github.TOKEN }}
+          approvers: user1,user2,org-team1
+          minimum-approvals: 1
+          issue-title: "Deploying v1.3.5 to prod from staging"
+          issue-body: "Please approve or deny the deployment of version v1.3.5."
+          
 
       # Apply the Terraform plan after approval
       - name: Terraform Apply (Post-Approval)

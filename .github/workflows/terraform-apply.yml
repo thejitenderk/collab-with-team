@@ -59,6 +59,7 @@ jobs:
     # needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
@@ -120,7 +121,7 @@ jobs:
     needs: terraformPlanAndCostEstimation
     name: "Terraform Apply with Manual Approval"
     runs-on: ubuntu-latest
-    environment: prod  # Change to your actual environment (dev, staging, prod)
+    environment: dev  # Change to your actual environment (dev, staging, prod)
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code

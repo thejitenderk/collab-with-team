@@ -19,7 +19,7 @@ permissions:
 jobs:
   # terraformLintAndScan:
   #   name: "Terraform Linting and Security Scans"
-  #   runs-on: ubuntu-latest
+  #   runs-on: arc-runner-set
   #   environment: dev  # Change to your actual environment (dev, staging, prod)
   #   steps:
   #     # Checkout the repository to the GitHub Actions runner
@@ -58,7 +58,7 @@ jobs:
   terraformPlanAndCostEstimation:
     # needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     outputs:
       plan_file: ${{ steps.save_plan.outputs.plan_file }}
     environment: dev
@@ -122,7 +122,7 @@ jobs:
   terraformApplyAndApproval:
     needs: terraformPlanAndCostEstimation
     name: "Terraform Apply with Manual Approval"
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     environment: dev  # Change to your actual environment (dev, staging, prod)
     steps:
       # Checkout the repository to the GitHub Actions runner

@@ -1,22 +1,21 @@
 resource "azurerm_network_interface" "nic" {
   for_each            = var.lvmm
   name                = each.value.nicname
-  location            = each.value.rgloc
+  location            = each.value.location
   resource_group_name = each.value.rgname
 
   ip_configuration {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.datasubnet[each.key].id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = each.value.use_public_ip ? data.azurerm_public_ip.datapublic[each.key].id : null
   }
 }
 
 resource "azurerm_linux_virtual_machine" "lvm" {
   for_each                        = var.lvmm
-  name                            = each.value.name
+  name                            = each.key
   resource_group_name             = each.value.rgname
-  location                        = each.value.rgloc
+  location                        = each.value.location
   size                            = "Standard_B1s"
   admin_username                  = each.value.username
   admin_password                  = each.value.password

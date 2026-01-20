@@ -7,7 +7,6 @@ module "vnets" {
   depends_on = [module.rgs]
   source     = "../../module/virtual-network"
   vnet       = var.vnet_name
-
 }
 
 module "subnets" {
@@ -17,11 +16,11 @@ module "subnets" {
 }
 
 
-module "pips" {
-  depends_on = [module.rgs]
-  source     = "../../module/public-ip"
-  publicip   = var.pip
-}
+# module "pips" {
+#   depends_on = [module.rgs]
+#   source     = "../../module/public-ip"
+#   publicip   = var.pip
+# }
 
 module "vms" {
   depends_on = [module.pips, module.subnets, module.rgs]
@@ -38,6 +37,6 @@ module "nsg" {
 
 module "nicnsgass" {
   depends_on = [module.nsg, module.rgs, module.vms]
-  source     = "../../module/subnet-network-association"
+  source     = "../../module/nic-nsg-association"
   nicnsgass  = var.nicnsgass
 }

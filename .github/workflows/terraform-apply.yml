@@ -59,7 +59,6 @@ jobs:
     # needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
     runs-on: ubuntu-latest
-    environment: dev  # Change to your actual environment (dev, staging, prod)
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
@@ -121,7 +120,7 @@ jobs:
     needs: terraformPlanAndCostEstimation
     name: "Terraform Apply with Manual Approval"
     runs-on: ubuntu-latest
-    environment: dev  # Change to your actual environment (dev, staging, prod)
+    environment: prod  # Change to your actual environment (dev, staging, prod)
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
@@ -153,19 +152,9 @@ jobs:
         with:
           name: terraform-plan
           path: ./
-
-      # Await manual approval for Terraform Apply
-      - name: Await Manual Approval for Apply
-        uses: trstringer/manual-approval@v1.9.0
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: user1,user2,org-team1
-          minimum-approvals: 1
-          issue-title: "Deploying v1.3.5 to prod from staging"
-          issue-body: "Please approve or deny the deployment of version v1.3.5."
           
 
       # Apply the Terraform plan after approval
-      - name: Terraform Apply (Post-Approval)
+      - name: Terraform Apply 
         if: success()  # Only run if the manual approval step was successful
         run: terraform -chdir=environment/dev apply -auto-approve ./plan_${{ steps.download.outputs.build_id }}.tfplan

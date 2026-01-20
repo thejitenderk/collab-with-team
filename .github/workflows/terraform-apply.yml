@@ -89,6 +89,7 @@ jobs:
       - name: Terraform Plan Execution
         run: |
           terraform -chdir=environment/dev plan -out=./plan_$GITHUB_RUN_ID.tfplan
+          ls -l
         continue-on-error: false  # Fail immediately if plan execution fails
 
       # Perform cost estimation based on the Terraform plan

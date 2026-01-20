@@ -94,7 +94,12 @@ nsg = {
 
 nicnsgass = {
   nicnsgass1 = {
-    nicname = "dev-todo-jk-nic1"
+    nicname = "dev-todo-jk-fnic"
+    rgname  = "dev-todo-jk-rg"
+    nsg     = "devtodojknsg"
+  }
+  nicnsgass2 = {
+    nicname = "dev-todo-jk-bnic"
     rgname  = "dev-todo-jk-rg"
     nsg     = "devtodojknsg"
   }

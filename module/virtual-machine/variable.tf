@@ -7,7 +7,6 @@ variable "lvmm" {
     customdata = string
 
     nicname    = string
-    location   = string
     subnetname = string
     vnetname   = string
   }))

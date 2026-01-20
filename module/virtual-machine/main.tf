@@ -16,7 +16,7 @@ resource "azurerm_linux_virtual_machine" "lvm" {
   name                            = each.key
   resource_group_name             = each.value.rgname
   location                        = each.value.location
-  size                            = "Standard_B1s"
+  size                            = each.value.vm_size
   admin_username                  = each.value.username
   admin_password                  = each.value.password
   disable_password_authentication = false

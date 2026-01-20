@@ -27,6 +27,7 @@ variable "lvmms" {
     rgname     = optional(string, "dev-todo-jk-rg")
     vnetname   = optional(string, "dev-todo-jk-vnet")
     location   = optional(string, "West US")
+    vm_size    = optional(string, "Standard_D2s_v3")
     subnetname = string
     nicname    = string
     username   = string

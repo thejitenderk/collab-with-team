@@ -23,7 +23,7 @@ module "subnets" {
 # }
 
 module "vms" {
-  depends_on = [module.pips, module.subnets, module.rgs]
+  depends_on = [ module.subnets, module.rgs]
   source     = "../../module/virtual-machine"
   lvmm       = var.lvmms
 }

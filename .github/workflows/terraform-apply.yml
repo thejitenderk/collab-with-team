@@ -113,7 +113,7 @@ jobs:
         uses: actions/upload-artifact@v6.0.0
         with:
           name: terraform-plan
-          path: ./plan_$GITHUB_RUN_ID.tfplan
+          path: ./environment/dev/plan_$GITHUB_RUN_ID.tfplan
 
   terraformApplyAndApproval:
     needs: terraformPlanAndCostEstimation

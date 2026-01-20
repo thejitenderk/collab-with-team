@@ -158,4 +158,4 @@ jobs:
       # Apply the Terraform plan after approval
       - name: Terraform Apply 
         if: success()  # Only run if the manual approval step was successful
-        run: terraform -chdir=environment/dev apply -auto-approve ./plan_${{ steps.download.outputs.build_id }}.tfplan
+        run: terraform -chdir=environment/dev apply -auto-approve ./plan_${{ GITHUB.RUN_ID }}.tfplan

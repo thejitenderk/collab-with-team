@@ -101,18 +101,13 @@ jobs:
           name: terraform-plan
           path: ./environment/dev/plan_${{ GITHUB.RUN_ID }}.tfplan
   
+
   terraformApplyAndApproval:
     needs: terraformPlanAndCostEstimation
     name: "Terraform Apply with Manual Approval"
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: dev
-  
-  terraformApply:
-    needs: terraformApplyAndApproval
-    name: "Terraform Apply with Manual Approval"
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code

@@ -2,9 +2,11 @@ name: Terraform Infrastructure Deployment
 
 on:
   workflow_dispatch:
+  
   push:
     branches:
-      - features/*    
+      - features/*   
+      
   pull_request:
     branches:
       - main

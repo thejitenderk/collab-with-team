@@ -1,7 +1,10 @@
 name: Terraform Infrastructure Deployment
 
 on:
-  workflow_dispatch:      
+  workflow_dispatch:
+  push:
+    branches:
+      - features/*    
   pull_request:
     branches:
       - main
@@ -12,54 +15,52 @@ permissions:
   id-token: write
 
 jobs:
-  # terraformLintAndScan:
-  #   name: "Terraform Linting and Security Scans"
-  #   runs-on: arc-runner-set
-  #   environment: dev  # Change to your actual environment (dev, staging, prod)
-  #   steps:
-  #     # Checkout the repository to the GitHub Actions runner
-  #     - name: Checkout Repository Code
-  #       uses: actions/checkout@v6.0.2
+  terraformLintAndScan:
+    name: "Terraform Linting and Security Scans"
+    runs-on: ubuntu-latest
 
-  #     # Authenticate with Azure using the service principal credentials
-  #     - name: Azure Authentication
-  #       uses: azure/login@v2
-  #       with:
-  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    # environment: dev  # Change to your actual environment (dev, staging, prod)
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout Repository Code
+        uses: actions/checkout@v6.0.2
 
-  #     # Install and configure Terraform CLI
-  #     - name: Setup Terraform CLI
-  #       uses: hashicorp/setup-terraform@v1
+      # Authenticate with Azure using the service principal credentials
+      - name: Azure Authentication
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-  #     # Ensure the correct version of Terraform is installed
-  #     - name: Verify Terraform Version
-  #       run: terraform --version
+      # Install and configure Terraform CLI
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v1
 
-  #     # Lint Terraform code to ensure formatting and validity
-  #     - name: Lint Terraform Configuration
-  #       run: |
-  #         terraform fmt -check -diff  # Check for any formatting issues
-  #         terraform validate  # Validate the Terraform configuration files
+      # Ensure the correct version of Terraform is installed
+      - name: Verify Terraform Version
+        run: terraform --version
 
-  #     # Run security scan on Terraform configuration using tfsec
-  #     - name: Run tfsec Security Scan
-  #       run: |
-  #         curl -sSL https://github.com/aquasecurity/tfsec/releases/download/v1.0.0/tfsec-linux-amd64 -o /usr/local/bin/tfsec
-  #         chmod +x /usr/local/bin/tfsec
-  #         tfsec ./environment/dev # Perform security scan on the dev environment
+      # Lint Terraform code to ensure formatting and validity
+      - name: Lint Terraform Configuration
+        run: |
+          terraform fmt -check -diff  # Check for any formatting issues
+          terraform validate  # Validate the Terraform configuration files
+
+      # Run security scan on Terraform configuration using tfsec
+      - name: Run tfsec Security Scan
+        run: |
+          curl -sSL https://github.com/aquasecurity/tfsec/releases/download/v1.0.0/tfsec-linux-amd64 -o /usr/local/bin/tfsec
+          chmod +x /usr/local/bin/tfsec
+          tfsec ./environment/dev # Perform security scan on the dev environment
 
   terraformPlanAndCostEstimation:
-    # needs: terraformLintAndScan
+    needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
     runs-on: ubuntu-latest
     outputs:
       plan_file: ${{ steps.save_plan.outputs.plan_file }}
       
-    permissions:
-      contents: read
-      id-token: write
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout Repository Code
@@ -93,24 +94,7 @@ jobs:
         id: save_plan
         continue-on-error: false  # Fail immediately if plan execution fails
 
-      # Perform cost estimation based on the Terraform plan
-
-      # - name: Setup Infracost
-      #   uses: infracost/actions/setup@v3
-      #   # See https://github.com/infracost/actions/tree/master/setup for other inputs
-      #   # If you can't use this action, use Docker image infracost/infracost:ci-0.10
-      #   with:
-      #     api-key: ico-gtkv3hjTodX5SSd1iXocWqlbPY1VSvJC
-      #     path: ./environment/dev
-
-      # # Upload the Infracost JSON file as an artifact
-      # - name: Upload Infracost cost estimate file
-      #   uses: actions/upload-artifact@v6.0.0
-      #   with:
-      #     name: infracost-estimate
-      #     path: ./infracost-base.json
-
-      # Upload Terraform plan as an artifact for the apply job
+      # Plan the Terraform infrastructure changes
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v6.0.0
         with:
@@ -120,6 +104,7 @@ jobs:
   terraformApplyAndApproval:
     needs: terraformPlanAndCostEstimation
     name: "Terraform Apply with Manual Approval"
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: dev  # Change to your actual environment (dev, staging, prod)
     steps:

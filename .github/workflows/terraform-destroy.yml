@@ -19,7 +19,7 @@ permissions:
 jobs:
   terraform-destroy:
     name: "Terraform Infrastructure Destroy"
-    runs-on: arc-runner-set
+    runs-on: ubuntu-latest
     environment:
       name: dev # Changed to the 'dev' environment for manual approval
       url: https://github.com/thejitenderk/COLLAB-WITH-TEAM

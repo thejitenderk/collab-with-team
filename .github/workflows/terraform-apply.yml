@@ -19,7 +19,9 @@ jobs:
   terraformLintAndScan:
     name: "Terraform Linting and Security Scans"
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && 
+        github.event.action != 'closed' && 
+        github.event.pull_request.merged == true
 
     # environment: dev  # Change to your actual environment (dev, staging, prod)
     steps:
@@ -59,7 +61,8 @@ jobs:
   terraformPlanAndCostEstimation:
     needs: terraformLintAndScan
     name: "Terraform Plan and Cost Estimation"
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && 
+        github.event.action != 'closed'
     runs-on: ubuntu-latest
     outputs:
       plan_file: ${{ steps.save_plan.outputs.plan_file }}
